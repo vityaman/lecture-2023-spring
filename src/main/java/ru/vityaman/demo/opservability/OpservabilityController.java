@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/ops")
-public class OpservabilityController {
+class OpservabilityController {
 
     @GetMapping("/ping")
-    public String ping() { return "pong"; }
+    String ping() { return "pong"; }
 }
