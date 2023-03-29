@@ -8,7 +8,7 @@ class Mailbox {
 class Message {
   id: Message.Id
   senderId: Mailbox.Id
-  recieverId: Mailbox.Id
+  receiverId: Mailbox.Id
   body: Message.Body
 }
 

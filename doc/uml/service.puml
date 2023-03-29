@@ -33,13 +33,13 @@ package "message" {
     id: Message.Id
     time: DateTime
     senderId: Mailbox.Id
-    recieverId: Mailbox.Id
+    receiverId: Mailbox.Id
     body: Message.Body
   }
 
   class MessageDraft {
     senderId: Mailbox.Id
-    recieverId: Mailbox.Id
+    receiverId: Mailbox.Id
     body: Message.Body
   }
 
@@ -50,17 +50,17 @@ package "message" {
     sendMessage(message: MessageDraft): Message
     getAllMessagesBetween(a: Mailbox.Id, b: Mailbox.Id): Collection<Message>
     getAllMessagesBySenderId(id: Mailbox.Id): Collection<Message>
-    getAllMessagesByRecieverId(id: Mailbox.Id): Collection<Message>
+    getAllMessagesByReceiverId(id: Mailbox.Id): Collection<Message>
   }
 
   class MessageRepository {
     mailboxes: ArrayList<Message>
     indexBySender: TreeMap<Int, Int>
-    indexByReciever: TreeMap<Int, Int>
+    indexByReceiver: TreeMap<Int, Int>
 
     createMessage(message: MessageDraft): Message
     getAllMessagesBySenderId(id: Mailbox.Id): Collection<Message>
-    getAllMessagesByRecieverId(id: Mailbox.Id): Collection<Message>
+    getAllMessagesByReceiverId(id: Mailbox.Id): Collection<Message>
   }
 
   MessageService --> Message
