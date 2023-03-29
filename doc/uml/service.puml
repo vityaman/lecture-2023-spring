@@ -1,0 +1,76 @@
+@startuml "Service"
+
+package "mailbox" {
+  class Mailbox {
+    id: Mailbox.Id
+    publicAddress: Mailbox.Address
+  }
+
+  class MailboxDraft {
+    publicAddress: Mailbox.Address
+  }
+
+  class MailboxService {
+    repository: MailboxRepository
+
+    createMailbox(mailbox: MailboxDraft): Mailbox
+  }
+
+  class MailboxRepository {
+    mailboxes: ArrayList<Mailbox>
+
+    createMailbox(mailbox: MailboxDraft): Mailbox
+    getMailboxById(id: Mailbox.Id): Mailbox
+  }
+
+  MailboxService --> Mailbox
+  MailboxService --> MailboxRepository
+  MailboxRepository --> Mailbox
+}
+
+package "message" {
+  class Message {
+    id: Message.Id
+    time: DateTime
+    senderId: Mailbox.Id
+    receiverId: Mailbox.Id
+    body: Message.Body
+  }
+
+  class MessageDraft {
+    senderId: Mailbox.Id
+    receiverId: Mailbox.Id
+    body: Message.Body
+  }
+
+  class MessageService {
+    mailboxService: MailboxService
+    repository: MessageRepository
+    
+    sendMessage(message: MessageDraft): Message
+    getAllMessagesBetween(a: Mailbox.Id, b: Mailbox.Id): Collection<Message>
+    getAllMessagesBySenderId(id: Mailbox.Id): Collection<Message>
+    getAllMessagesByReceiverId(id: Mailbox.Id): Collection<Message>
+  }
+
+  class MessageRepository {
+    mailboxes: ArrayList<Message>
+    indexBySender: TreeMap<Int, Int>
+    indexByReceiver: TreeMap<Int, Int>
+
+    createMessage(message: MessageDraft): Message
+    getAllMessagesBySenderId(id: Mailbox.Id): Collection<Message>
+    getAllMessagesByReceiverId(id: Mailbox.Id): Collection<Message>
+  }
+
+  MessageService --> Message
+  MessageService --> MessageRepository
+  MessageRepository --> Message
+}
+
+Message -> Mailbox
+MessageService -> MailboxService
+MessageService -> Mailbox
+MessageRepository -> Mailbox
+
+@enduml

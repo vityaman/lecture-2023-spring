@@ -1,0 +1,17 @@
+@startuml "Model"
+
+class Mailbox {
+  id: Mailbox.Id
+  publicAddress: Mailbox.Address
+}
+
+class Message {
+  id: Message.Id
+  senderId: Mailbox.Id
+  receiverId: Mailbox.Id
+  body: Message.Body
+}
+
+Message --> Mailbox
+
+@enduml
