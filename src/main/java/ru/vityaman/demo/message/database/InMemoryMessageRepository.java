@@ -53,15 +53,17 @@ public class InMemoryMessageRepository implements MessageRepository {
 
     @Override
     public Collection<Message> getAllMessagesWithSenderId(Mailbox.Id senderId) {
-        final var indexes = indexBySenderId.subSet(
-                senderId.getValue(), true, senderId.getValue(), true);
-        return messages.subList(indexes.first(), indexes.last());
+        final var id = senderId.getValue();
+        return indexBySenderId.subSet(id, true, id, true).stream()
+                .map(messages::get)
+                .toList();
     }
 
     @Override
     public Collection<Message> getAllMessagesWithReceiverId(Mailbox.Id receiverId) {
-        final var indexes = indexByReceiverId.subSet(
-                receiverId.getValue(), true, receiverId.getValue(), true);
-        return messages.subList(indexes.first(), indexes.last());
+        final var id = receiverId.getValue();
+        return indexByReceiverId.subSet(id, true, id, true).stream()
+                .map(messages::get)
+                .toList();
     }
 }
