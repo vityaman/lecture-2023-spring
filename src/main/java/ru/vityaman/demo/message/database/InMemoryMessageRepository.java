@@ -3,37 +3,36 @@ package ru.vityaman.demo.message.database;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.NavigableSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.util.MultiValueMap;
 
 import ru.vityaman.demo.mailbox.model.Mailbox;
 import ru.vityaman.demo.message.model.Message;
 import ru.vityaman.demo.message.model.MessageDraft;
 
+@Repository
 public class InMemoryMessageRepository implements MessageRepository {
     private final Clock clock;
 
     private final List<Message> messages;
-    private final NavigableSet<Integer> indexBySenderId;
-    private final NavigableSet<Integer> indexByReceiverId;
+    private final Map<Mailbox.Id, Set<Integer>> indexBySenderId;
+    private final Map<Mailbox.Id, Set<Integer>> indexByReceiverId;
 
     public InMemoryMessageRepository(Clock clock) {
         this.clock = clock;
 
         messages = new ArrayList<>();
-
-        indexBySenderId = new TreeSet<>(Comparator
-                .<Integer, Integer>comparing((index) -> messages.get(index)
-                        .getSenderId().getValue())
-                .thenComparing(index -> index));
-
-        indexByReceiverId = new TreeSet<>(Comparator
-                .<Integer, Integer>comparing((index) -> messages.get(index)
-                        .getReceiverId().getValue())
-                .thenComparing(index -> index));
+        indexBySenderId = new HashMap<>();
+        indexByReceiverId = new HashMap<>();
     }
 
     @Override
@@ -48,25 +47,29 @@ public class InMemoryMessageRepository implements MessageRepository {
                 message.getBody());
 
         messages.add(item);
-        indexBySenderId.add(insertionIndex);
-        indexByReceiverId.add(insertionIndex);
+        indexBySenderId
+                .computeIfAbsent(item.getSenderId(), (k) -> new TreeSet<>())
+                .add(insertionIndex);
+        indexByReceiverId
+                .computeIfAbsent(item.getReceiverId(), (k) -> new TreeSet<>())
+                .add(insertionIndex);
 
         return item;
     }
 
     @Override
     public Stream<Message> getAllMessagesWithSenderId(Mailbox.Id senderId) {
-        final var id = senderId.getValue();
-        return indexBySenderId.subSet(id, true, id, true).stream()
-                .map(messages::get)
-                .toList();
+        return indexBySenderId
+                .getOrDefault(senderId, Collections.emptySet())
+                .stream()
+                .map(messages::get);
     }
 
     @Override
     public Stream<Message> getAllMessagesWithReceiverId(Mailbox.Id receiverId) {
-        final var id = receiverId.getValue();
-        return indexByReceiverId.subSet(id, true, id, true).stream()
-                .map(messages::get)
-                .toList();
+        return indexByReceiverId
+                .getOrDefault(receiverId, Collections.emptySet())
+                .stream()
+                .map(messages::get);
     }
 }

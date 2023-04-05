@@ -1,13 +1,17 @@
 package ru.vityaman.demo.message.service;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.stream.Stream;
+
+import org.springframework.stereotype.Service;
 
 import ru.vityaman.demo.mailbox.model.Mailbox;
 import ru.vityaman.demo.message.database.MessageRepository;
 import ru.vityaman.demo.message.model.Message;
 import ru.vityaman.demo.message.model.MessageDraft;
 
+@Service
 public class BasicMessageService implements MessageService {
     private final MessageRepository repository;
 
@@ -28,6 +32,7 @@ public class BasicMessageService implements MessageService {
                         .filter((message) -> message.getReceiverId().equals(b)),
                 repository.getAllMessagesWithSenderId(b)
                         .filter((message) -> message.getReceiverId().equals(a)))
+                .sorted(Comparator.comparing((message) -> message.getId().getValue()))
                 .toList();
     }
 
