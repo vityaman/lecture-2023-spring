@@ -1,6 +1,7 @@
-package ru.vityaman.demo.mailbox;
+package ru.vityaman.demo.mailbox.error;
 
 import lombok.experimental.StandardException;
+import ru.vityaman.demo.mailbox.model.Mailbox;
 
 @StandardException
 public class MailboxAddressAlreadyInUseException extends Exception {

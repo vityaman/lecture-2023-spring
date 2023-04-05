@@ -1,4 +1,4 @@
-package ru.vityaman.demo.mailbox;
+package ru.vityaman.demo.mailbox.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import ru.vityaman.demo.mailbox.error.MailboxAddressAlreadyInUseException;
+import ru.vityaman.demo.mailbox.service.MailboxService;
 
 @RestController
 @RequestMapping("/mailbox")

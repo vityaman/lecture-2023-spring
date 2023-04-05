@@ -1,8 +1,10 @@
-package ru.vityaman.demo.mailbox;
+package ru.vityaman.demo.mailbox.api;
 
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import ru.vityaman.demo.mailbox.model.Mailbox;
+import ru.vityaman.demo.mailbox.model.MailboxDraft;
 
 @Jacksonized
 @Builder

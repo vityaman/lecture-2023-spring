@@ -1,6 +1,11 @@
-package ru.vityaman.demo.mailbox;
+package ru.vityaman.demo.mailbox.service;
 
 import org.springframework.stereotype.Service;
+
+import ru.vityaman.demo.mailbox.database.MailboxRepository;
+import ru.vityaman.demo.mailbox.error.MailboxAddressAlreadyInUseException;
+import ru.vityaman.demo.mailbox.model.Mailbox;
+import ru.vityaman.demo.mailbox.model.MailboxDraft;
 
 @Service
 class BasicMailboxService implements MailboxService {

@@ -1,4 +1,4 @@
-package ru.vityaman.demo.mailbox;
+package ru.vityaman.demo.mailbox.error;
 
 import lombok.experimental.StandardException;
 
