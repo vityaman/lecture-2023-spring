@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: Demo Mail Service
+  version: 0.0.1
+  description: |
+    Сервис Почтальон 
+    осуществляет доставку писем от одного зарегистрированного пользователя к другому,
+    предоставляет доступ к 
+      истории переписки между двумя заданными пользователями, 
+      спискам отправленных, полученных и непрочитанных 
+      заданным пользователем сообщений.
+    Он предоставляет возможность получателю 
+      отметить сообщение как прочитанное,
+      группировать сообщения по тегам, 
+      а также искать письма по содержимому в теле сообщения.
+servers:
+  - url: /
+paths:
+  /ops/ping:
+    get:
+      summary: Checks if server is alive
+      description: Returns 'pong' if server is alive and ok, otherwise throws an error.
+      responses:
+        200:
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                example: pong
