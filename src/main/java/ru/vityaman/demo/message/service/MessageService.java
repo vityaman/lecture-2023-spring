@@ -13,5 +13,5 @@ public interface MessageService {
 
     Collection<Message> getAllMessagesWithSenderId(Mailbox.Id senderId);
 
-    Collection<Message> getAllMessagesWithReceiverId(Mailbox.Id senderId);
+    Collection<Message> getAllMessagesWithReceiverId(Mailbox.Id receiverId);
 }

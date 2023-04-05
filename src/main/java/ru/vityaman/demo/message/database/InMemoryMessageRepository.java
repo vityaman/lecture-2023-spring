@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import ru.vityaman.demo.mailbox.model.Mailbox;
 import ru.vityaman.demo.message.model.Message;
@@ -25,12 +26,14 @@ public class InMemoryMessageRepository implements MessageRepository {
         messages = new ArrayList<>();
 
         indexBySenderId = new TreeSet<>(Comparator
-                .comparing((index) -> messages.get(index)
-                        .getSenderId().getValue()));
+                .<Integer, Integer>comparing((index) -> messages.get(index)
+                        .getSenderId().getValue())
+                .thenComparing(index -> index));
 
         indexByReceiverId = new TreeSet<>(Comparator
-                .comparing((index) -> messages.get(index)
-                        .getReceiverId().getValue()));
+                .<Integer, Integer>comparing((index) -> messages.get(index)
+                        .getReceiverId().getValue())
+                .thenComparing(index -> index));
     }
 
     @Override
@@ -52,7 +55,7 @@ public class InMemoryMessageRepository implements MessageRepository {
     }
 
     @Override
-    public Collection<Message> getAllMessagesWithSenderId(Mailbox.Id senderId) {
+    public Stream<Message> getAllMessagesWithSenderId(Mailbox.Id senderId) {
         final var id = senderId.getValue();
         return indexBySenderId.subSet(id, true, id, true).stream()
                 .map(messages::get)
@@ -60,7 +63,7 @@ public class InMemoryMessageRepository implements MessageRepository {
     }
 
     @Override
-    public Collection<Message> getAllMessagesWithReceiverId(Mailbox.Id receiverId) {
+    public Stream<Message> getAllMessagesWithReceiverId(Mailbox.Id receiverId) {
         final var id = receiverId.getValue();
         return indexByReceiverId.subSet(id, true, id, true).stream()
                 .map(messages::get)
