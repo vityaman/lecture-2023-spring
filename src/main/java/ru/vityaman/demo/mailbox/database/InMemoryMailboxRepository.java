@@ -1,10 +1,15 @@
-package ru.vityaman.demo.mailbox;
+package ru.vityaman.demo.mailbox.database;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.stereotype.Repository;
+
+import ru.vityaman.demo.mailbox.error.MailboxAddressAlreadyInUseException;
+import ru.vityaman.demo.mailbox.error.MailboxNotFoundException;
+import ru.vityaman.demo.mailbox.model.Mailbox;
+import ru.vityaman.demo.mailbox.model.MailboxDraft;
 
 @Repository
 final class InMemoryMailboxRepository implements MailboxRepository {
