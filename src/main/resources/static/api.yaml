@@ -29,3 +29,59 @@ paths:
               schema:
                 type: string
                 example: pong
+  /mailboxes:
+    post:
+      tags: [Mailboxes]
+      summary: Creates new mailbox.
+      description: Creates new mailbox account with a given email as login.
+      requestBody:
+        description: Mailbox draft to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MailboxDraftView'
+      responses:
+        200:
+          description: Mailbox created.
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailboxView'
+        400:
+          description: Mailbox address already in use.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorView'
+
+components:
+  schemas:
+
+    GeneralErrorView:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        status:
+          type: string
+        message:
+          type: string
+
+    MailboxDraftView:
+      type: object
+      properties:
+        publicAddress:
+          type: string
+          format: email
+      
+    MailboxView:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        publicAddress:
+          type: string
+          format: email
