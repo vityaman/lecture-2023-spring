@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Demo Mail Service
+  title: Demo Mail service Fonar
   version: 0.0.1
   description: |
     Сервис Почтальон 
@@ -20,8 +20,8 @@ paths:
   /ops/ping:
     get:
       tags: [Monitoring]
-      summary: Checks if server is alive
-      description: Returns 'pong' if server is alive and ok, otherwise throws an error.
+      summary: Проверяет, жив ли сервис
+      description: Вернет pong, если сервис жив, иначе будем плакать.
       responses:
         200:
           description: OK
@@ -34,10 +34,10 @@ paths:
   /mailboxes:
     post:
       tags: [Mailboxes]
-      summary: Creates new mailbox.
-      description: Creates new mailbox account with a given email as login.
+      summary: Создает новый почтовый ящик.
+      description: Регистрирует новый почтовый ящик с данным адресом или падает с ошибкой, если адрес уже занят.
       requestBody:
-        description: Mailbox draft to create
+        description: Черновик почтового ящика.
         required: true
         content:
           application/json:
@@ -45,13 +45,13 @@ paths:
               $ref: '#/components/schemas/MailboxDraftView'
       responses:
         200:
-          description: Mailbox created.
+          description: Почтовый ящик зарегестрирован.
           content: 
             application/json:
               schema:
                 $ref: '#/components/schemas/MailboxView'
         400:
-          description: Mailbox address already in use.
+          description: Почтовый адресс уже занят.
           content:
             application/json:
               schema:
@@ -60,10 +60,10 @@ paths:
   /messages:
     post:
       tags: [Messages]
-      summary: Sends a message.
-      description: Send message from 'sender' to 'receiver', returns created Message object.
+      summary: Отправляет сообщение.
+      description: Отправляет черновик сообщения и возвращает объект сообщения.
       requestBody:
-        description: Message draft to send.
+        description: Черновик сообщения для отправки.
         required: true
         content:
           application/json:
@@ -71,7 +71,7 @@ paths:
               $ref: '#/components/schemas/MessageDraftView'
       responses:
         200:
-          description: Message sent.
+          description: Сообщение отправлено.
           content:
             application/json:
               schema:
@@ -79,19 +79,19 @@ paths:
 
     get:
       tags: [Messages]
-      summary: Get all conversation messages.
-      description: Returns all messages in conversation between 'a' and 'b'
+      summary: Получить историю переписки между двумя пользователями.
+      description: Возвращает все сообщения отправленные с адреса с идентификатором a на адрес с идентификатором b и наоборот.
       parameters:
         - in: query
           name: a
           schema: 
             type: integer
-          description: Id of the first mailbox.
+          description: Идентификатор первого почтового ящика.
         - in: query
           name: b
           schema: 
             type: integer
-          description: Id of the second mailbox.
+          description: Идентификатор второго почтового ящика.
       responses:
         200:
           description: OK
