@@ -45,6 +45,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	compileOnly 'joda-time:joda-time:2.12.5'
 	compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
 	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 	compileOnly 'javax.validation:validation-api:2.0.1.Final'
@@ -65,7 +66,7 @@ tasks.named('test') {
 
 openApiGenerate {
     generatorName = 'spring'
-    inputSpec = "$rootDir/src/main/resources/static/api.yaml".toString()
+    inputSpec = "$rootDir/src/main/resources/static/openapi/api.yaml".toString()
     outputDir = "$buildDir/generated/openapi".toString()
     apiPackage = 'ru.vityaman.demo.api'
     modelPackage = 'ru.vityaman.demo.api.model'

@@ -16,6 +16,7 @@ info:
 servers:
   - url: /api/v1/
 paths:
+
   /ops/ping:
     get:
       tags: [Monitoring]
@@ -29,6 +30,7 @@ paths:
               schema:
                 type: string
                 example: pong
+  
   /mailboxes:
     post:
       tags: [Mailboxes]
@@ -54,6 +56,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GeneralErrorView'
+
+  /messages:
+    post:
+      tags: [Messages]
+      summary: Sends a message.
+      description: Send message from 'sender' to 'receiver', returns created Message object.
+      requestBody:
+        description: Message draft to send.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageDraftView'
+      responses:
+        200:
+          description: Message sent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageView'
+
+    get:
+      tags: [Messages]
+      summary: Get all conversation messages.
+      description: Returns all messages in conversation between 'a' and 'b'
+      parameters:
+        - in: query
+          name: a
+          schema: 
+            type: integer
+          description: Id of the first mailbox.
+        - in: query
+          name: b
+          schema: 
+            type: integer
+          description: Id of the second mailbox.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationView'
 
 components:
   schemas:
@@ -85,3 +130,40 @@ components:
         publicAddress:
           type: string
           format: email
+
+    MessageDraftView:
+      type: object
+      properties:
+        senderId:
+          type: integer
+          format: int32
+        receiverId:
+          type: integer
+          format: int32
+        text:
+          type: string
+
+    MessageView:
+      type: object
+      properties:
+        id: 
+          type: integer
+          format: int32
+        timestamp:
+          type: date-time
+        senderId:
+          type: integer
+          format: int32
+        receiverId:
+          type: integer
+          format: int32
+        text:
+          type: string
+
+    ConversationView:
+      type: object
+      properties:
+        messages:
+          type: array
+          items: 
+            $ref: '#/components/schemas/MessageView'
