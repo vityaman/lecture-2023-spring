@@ -1,4 +1,4 @@
-package ru.vityaman.demo;
+package ru.vityaman.demo.config;
 
 import java.time.Clock;
 
@@ -12,4 +12,5 @@ class DemoConfiguration {
     Clock clock() {
         return Clock.systemDefaultZone();
     }
+
 }
