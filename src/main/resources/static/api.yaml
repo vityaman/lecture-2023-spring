@@ -14,10 +14,11 @@ info:
       группировать сообщения по тегам, 
       а также искать письма по содержимому в теле сообщения.
 servers:
-  - url: /
+  - url: /api/v1/
 paths:
   /ops/ping:
     get:
+      tags: [Monitoring]
       summary: Checks if server is alive
       description: Returns 'pong' if server is alive and ok, otherwise throws an error.
       responses:
