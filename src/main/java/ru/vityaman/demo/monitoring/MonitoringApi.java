@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.vityaman.demo.api.MonitoringApiDelegate;
 
 @Service
-public class MonitoringApiDelegateImpl implements MonitoringApiDelegate {
+public class MonitoringApi implements MonitoringApiDelegate {
     @Override
     public ResponseEntity<String> opsPingGet() throws Exception {
         return ResponseEntity.ok("pong");
