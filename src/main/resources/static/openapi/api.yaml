@@ -1,0 +1,169 @@
+openapi: 3.0.0
+info:
+  title: Demo Mail service Fonar
+  version: 0.0.1
+  description: |
+    Сервис Почтальон 
+    осуществляет доставку писем от одного зарегистрированного пользователя к другому,
+    предоставляет доступ к 
+      истории переписки между двумя заданными пользователями, 
+      спискам отправленных, полученных и непрочитанных 
+      заданным пользователем сообщений.
+    Он предоставляет возможность получателю 
+      отметить сообщение как прочитанное,
+      группировать сообщения по тегам, 
+      а также искать письма по содержимому в теле сообщения.
+servers:
+  - url: /api/v1/
+paths:
+
+  /ops/ping:
+    get:
+      tags: [Monitoring]
+      summary: Проверяет, жив ли сервис
+      description: Вернет pong, если сервис жив, иначе будем плакать.
+      responses:
+        200:
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+                example: pong
+  
+  /mailboxes:
+    post:
+      tags: [Mailboxes]
+      summary: Создает новый почтовый ящик.
+      description: Регистрирует новый почтовый ящик с данным адресом или падает с ошибкой, если адрес уже занят.
+      requestBody:
+        description: Черновик почтового ящика.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MailboxDraftView'
+      responses:
+        200:
+          description: Почтовый ящик зарегестрирован.
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailboxView'
+        400:
+          description: Почтовый адресс уже занят.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorView'
+
+  /messages:
+    post:
+      tags: [Messages]
+      summary: Отправляет сообщение.
+      description: Отправляет черновик сообщения и возвращает объект сообщения.
+      requestBody:
+        description: Черновик сообщения для отправки.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageDraftView'
+      responses:
+        200:
+          description: Сообщение отправлено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageView'
+
+    get:
+      tags: [Messages]
+      summary: Получить историю переписки между двумя пользователями.
+      description: Возвращает все сообщения отправленные с адреса с идентификатором a на адрес с идентификатором b и наоборот.
+      parameters:
+        - in: query
+          name: a
+          schema: 
+            type: integer
+          description: Идентификатор первого почтового ящика.
+        - in: query
+          name: b
+          schema: 
+            type: integer
+          description: Идентификатор второго почтового ящика.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationView'
+
+components:
+  schemas:
+
+    GeneralErrorView:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        status:
+          type: string
+        message:
+          type: string
+
+    MailboxDraftView:
+      type: object
+      properties:
+        publicAddress:
+          type: string
+          format: email
+      
+    MailboxView:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        publicAddress:
+          type: string
+          format: email
+
+    MessageDraftView:
+      type: object
+      properties:
+        senderId:
+          type: integer
+          format: int32
+        receiverId:
+          type: integer
+          format: int32
+        text:
+          type: string
+
+    MessageView:
+      type: object
+      properties:
+        id: 
+          type: integer
+          format: int32
+        timestamp:
+          type: date-time
+        senderId:
+          type: integer
+          format: int32
+        receiverId:
+          type: integer
+          format: int32
+        text:
+          type: string
+
+    ConversationView:
+      type: object
+      properties:
+        messages:
+          type: array
+          items: 
+            $ref: '#/components/schemas/MessageView'
