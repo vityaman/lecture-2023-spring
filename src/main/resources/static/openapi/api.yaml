@@ -32,6 +32,30 @@ paths:
                 example: pong
   
   /mailboxes:
+    get:
+      tags: [Mailboxes]
+      summary: Находит почтовый ящик по его адресу.
+      description: Возвращает объект почтового ящика с данным адресом либо падает с ошибкой, если не найдет аккаунт.
+      parameters:
+        - in: query
+          name: address
+          schema: 
+            type: string
+            format: email
+          description: Адрес почтового ящика.
+      responses:
+        200:
+          description: OK.
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailboxView'
+        404:
+          description: Почтовый адрес не найден.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorView'
     post:
       tags: [Mailboxes]
       summary: Создает новый почтовый ящик.

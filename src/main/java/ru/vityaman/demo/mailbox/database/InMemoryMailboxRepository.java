@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import ru.vityaman.demo.mailbox.error.MailboxAddressAlreadyInUseException;
 import ru.vityaman.demo.mailbox.error.MailboxNotFoundException;
 import ru.vityaman.demo.mailbox.model.Mailbox;
+import ru.vityaman.demo.mailbox.model.Mailbox.Address;
 import ru.vityaman.demo.mailbox.model.MailboxDraft;
 
 final class InMemoryMailboxRepository implements MailboxRepository {
@@ -40,11 +41,19 @@ final class InMemoryMailboxRepository implements MailboxRepository {
 
     @Override
     public synchronized Mailbox getMailboxById(Mailbox.Id id) throws MailboxNotFoundException {
-        try {
-            return mailboxes.get(id.getValue());
-        } catch (IndexOutOfBoundsException e) {
-            throw new MailboxNotFoundException(e);
+        if (mailboxes.size() <= id.getValue()) {
+            throw new MailboxNotFoundException(id);
         }
+        return mailboxes.get(id.getValue());
+    }
+
+    @Override
+    public synchronized Mailbox getMailboxByAddress(Address address) throws MailboxNotFoundException {
+        final var index = indexByAddress.get(address.getValue());
+        if (index == null) {
+            throw new MailboxNotFoundException(address);
+        }
+        return mailboxes.get(index);
     }
 
     private int nextId() {

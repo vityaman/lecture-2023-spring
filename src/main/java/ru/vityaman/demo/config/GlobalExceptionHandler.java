@@ -9,17 +9,29 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.io.IOException;
 
+import javax.validation.ConstraintViolationException;
+
 import ru.vityaman.demo.api.model.GeneralErrorView;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<GeneralErrorView> handleException(
-            ResponseStatusException e) throws IOException {
+            ResponseStatusException e) {
         return new ResponseEntity<>(new GeneralErrorView()
                 .code(e.getRawStatusCode())
                 .status(e.getStatus().toString())
                 .message(e.getReason()),
                 HttpStatus.valueOf(e.getRawStatusCode()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<GeneralErrorView> handleConstraintViolation(
+            ConstraintViolationException e) {
+        return new ResponseEntity<>(new GeneralErrorView()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.toString())
+                .message(e.getMessage()),
+                HttpStatus.BAD_REQUEST);
     }
 }

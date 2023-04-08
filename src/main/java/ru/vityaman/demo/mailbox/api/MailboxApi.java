@@ -9,6 +9,7 @@ import ru.vityaman.demo.api.model.MailboxView;
 import ru.vityaman.demo.api.model.MailboxDraftView;
 import ru.vityaman.demo.api.MailboxesApiDelegate;
 import ru.vityaman.demo.mailbox.error.MailboxAddressAlreadyInUseException;
+import ru.vityaman.demo.mailbox.error.MailboxNotFoundException;
 import ru.vityaman.demo.mailbox.model.MailboxDraft;
 import ru.vityaman.demo.mailbox.model.Mailbox;
 import ru.vityaman.demo.mailbox.service.MailboxService;
@@ -26,16 +27,28 @@ class MailboxApi implements MailboxesApiDelegate {
         try {
             final var draft = new MailboxDraft(
                     new Mailbox.Address(mailboxDraftView.getPublicAddress()));
-
             final var mailbox = service.createMailbox(draft);
+            return ResponseEntity.ok(convert(mailbox));
 
-            return ResponseEntity.ok(new MailboxView()
-                    .id(mailbox.getId().getValue())
-                    .publicAddress(mailbox.getPublicAddress().getValue()));
-                    
         } catch (MailboxAddressAlreadyInUseException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
+    }
+
+    @Override
+    public ResponseEntity<MailboxView> mailboxesGet(String address) {
+        try {
+            final var mailbox = service.getMailboxWithAddress(new Mailbox.Address(address));
+            return ResponseEntity.ok(convert(mailbox));
+        } catch (MailboxNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    private MailboxView convert(Mailbox model) {
+        return new MailboxView()
+                .id(model.getId().getValue())
+                .publicAddress(model.getPublicAddress().getValue());
     }
 
 }

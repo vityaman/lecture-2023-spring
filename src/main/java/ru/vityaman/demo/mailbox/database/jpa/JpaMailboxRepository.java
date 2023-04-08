@@ -1,10 +1,10 @@
 package ru.vityaman.demo.mailbox.database.jpa;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
 
-import ru.vityaman.demo.mailbox.database.jpa.entity.MailboxEntity;
+import org.springframework.data.repository.CrudRepository;
 
 public interface JpaMailboxRepository
         extends CrudRepository<MailboxEntity, Integer> {
-
+    Optional<MailboxEntity> findByAddress(String address);
 }

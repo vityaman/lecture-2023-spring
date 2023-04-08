@@ -4,10 +4,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import ru.vityaman.demo.mailbox.database.jpa.JpaMailboxRepository;
-import ru.vityaman.demo.mailbox.database.jpa.entity.MailboxEntity;
+import ru.vityaman.demo.mailbox.database.jpa.MailboxEntity;
 import ru.vityaman.demo.mailbox.error.MailboxAddressAlreadyInUseException;
 import ru.vityaman.demo.mailbox.error.MailboxNotFoundException;
 import ru.vityaman.demo.mailbox.model.Mailbox;
+import ru.vityaman.demo.mailbox.model.Mailbox.Address;
 import ru.vityaman.demo.mailbox.model.Mailbox.Id;
 import ru.vityaman.demo.mailbox.model.MailboxDraft;
 
@@ -29,8 +30,7 @@ public class PersistentMailboxRepository implements MailboxRepository {
             return saved.toModel();
         } catch (DataIntegrityViolationException e) {
             throw new MailboxAddressAlreadyInUseException(
-                mailbox.getPublicAddress(), e
-            );
+                    mailbox.getPublicAddress(), e);
         }
     }
 
@@ -39,6 +39,14 @@ public class PersistentMailboxRepository implements MailboxRepository {
         return repository
                 .findById(id.getValue())
                 .orElseThrow(() -> new MailboxNotFoundException(id))
+                .toModel();
+    }
+
+    @Override
+    public Mailbox getMailboxByAddress(Address address) throws MailboxNotFoundException {
+        return repository
+                .findByAddress(address.getValue())
+                .orElseThrow(() -> new MailboxNotFoundException(address))
                 .toModel();
     }
 

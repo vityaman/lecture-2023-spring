@@ -1,18 +1,21 @@
-package ru.vityaman.demo.mailbox.database.jpa.entity;
+package ru.vityaman.demo.mailbox.database.jpa;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.vityaman.demo.mailbox.model.Mailbox;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MailboxEntity {
 
