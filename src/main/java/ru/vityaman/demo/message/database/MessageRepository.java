@@ -11,4 +11,5 @@ public interface MessageRepository {
     Message createMessage(MessageDraft message) throws MailboxNotFoundException;
     Stream<Message> getAllMessagesWithSenderId(Mailbox.Id senderId);
     Stream<Message> getAllMessagesWithReceiverId(Mailbox.Id receiverId);
+    Stream<Message> getConversationBetween(Mailbox.Id a, Mailbox.Id b);
 }

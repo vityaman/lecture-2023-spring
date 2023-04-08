@@ -1,7 +1,6 @@
 package ru.vityaman.demo.message.database;
 
 import java.time.Clock;
-import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.stream.Stream;
 
@@ -41,7 +40,6 @@ public class PersistentMessageRepository implements MessageRepository {
                     .build())
                     .toModel();
         } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
             throw new MailboxNotFoundException(message.getSenderId(), message.getReceiverId());
         }
     }
@@ -57,6 +55,13 @@ public class PersistentMessageRepository implements MessageRepository {
     public Stream<Message> getAllMessagesWithReceiverId(Id receiverId) {
         return repository
                 .findByReceiverId(receiverId.getValue())
+                .map(MessageEntity::toModel);
+    }
+
+    @Override
+    public Stream<Message> getConversationBetween(Id a, Id b) {
+        return repository
+                .getConversationBetween(a.getValue(), b.getValue())
                 .map(MessageEntity::toModel);
     }
 

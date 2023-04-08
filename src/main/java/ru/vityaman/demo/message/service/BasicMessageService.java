@@ -1,8 +1,6 @@
 package ru.vityaman.demo.message.service;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -27,14 +25,7 @@ public class BasicMessageService implements MessageService {
 
     @Override
     public Collection<Message> getAllMessagesBetween(Mailbox.Id a, Mailbox.Id b) {
-        // TODO: Can be optimized in repository
-        return Stream.concat(
-                repository.getAllMessagesWithSenderId(a)
-                        .filter((message) -> message.getReceiverId().equals(b)),
-                repository.getAllMessagesWithSenderId(b)
-                        .filter((message) -> message.getReceiverId().equals(a)))
-                .sorted(Comparator.comparing((message) -> message.getId().getValue()))
-                .toList();
+        return repository.getConversationBetween(a, b).toList();
     }
 
     @Override
