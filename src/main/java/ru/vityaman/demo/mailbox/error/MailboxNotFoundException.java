@@ -1,6 +1,5 @@
 package ru.vityaman.demo.mailbox.error;
 
-import lombok.experimental.StandardException;
 import ru.vityaman.demo.mailbox.model.Mailbox;
 
 public class MailboxNotFoundException extends Exception {

@@ -1,9 +1,7 @@
 package ru.vityaman.demo.message.database.jpa;
 
-import java.time.Instant;
 import java.util.Date;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
