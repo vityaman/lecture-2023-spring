@@ -11,4 +11,7 @@ public interface MailboxRepository {
 
     Mailbox getMailboxById(Mailbox.Id id)
             throws MailboxNotFoundException;
+
+    Mailbox getMailboxByAddress(Mailbox.Address address)
+            throws MailboxNotFoundException;
 }

@@ -2,7 +2,6 @@ package ru.vityaman.demo.message.database;
 
 import java.time.Clock;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,14 +11,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.util.MultiValueMap;
-
 import ru.vityaman.demo.mailbox.model.Mailbox;
+import ru.vityaman.demo.mailbox.model.Mailbox.Id;
 import ru.vityaman.demo.message.model.Message;
 import ru.vityaman.demo.message.model.MessageDraft;
 
-@Repository
 public class InMemoryMessageRepository implements MessageRepository {
     private final Clock clock;
 
@@ -71,5 +67,15 @@ public class InMemoryMessageRepository implements MessageRepository {
                 .getOrDefault(receiverId, Collections.emptySet())
                 .stream()
                 .map(messages::get);
+    }
+
+    @Override
+    public Stream<Message> getConversationBetween(Id a, Id b) {
+        return Stream.concat(
+                getAllMessagesWithSenderId(a)
+                        .filter((message) -> message.getReceiverId().equals(b)),
+                getAllMessagesWithSenderId(b)
+                        .filter((message) -> message.getReceiverId().equals(a)))
+                .sorted(Comparator.comparing((message) -> message.getId().getValue()));
     }
 }
