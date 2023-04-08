@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import ru.vityaman.demo.mailbox.error.MailboxNotFoundException;
 import ru.vityaman.demo.mailbox.model.Mailbox;
 import ru.vityaman.demo.message.database.MessageRepository;
 import ru.vityaman.demo.message.model.Message;
@@ -20,7 +21,7 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public Message sendMessage(MessageDraft message) {
+    public Message sendMessage(MessageDraft message) throws MailboxNotFoundException {
         return repository.createMessage(message);
     }
 

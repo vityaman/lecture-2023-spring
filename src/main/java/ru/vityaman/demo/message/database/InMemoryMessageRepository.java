@@ -12,14 +12,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.util.MultiValueMap;
-
 import ru.vityaman.demo.mailbox.model.Mailbox;
 import ru.vityaman.demo.message.model.Message;
 import ru.vityaman.demo.message.model.MessageDraft;
 
-@Repository
 public class InMemoryMessageRepository implements MessageRepository {
     private final Clock clock;
 
