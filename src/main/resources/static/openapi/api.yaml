@@ -3,7 +3,7 @@ info:
   title: Demo Mail service Fonar
   version: 0.0.1
   description: |
-    Сервис Почтальон 
+    Сервис Почтальон (Философские письма 2.0)
     осуществляет доставку писем от одного зарегистрированного пользователя к другому,
     предоставляет доступ к 
       истории переписки между двумя заданными пользователями, 
@@ -30,7 +30,7 @@ paths:
               schema:
                 type: string
                 example: pong
-  
+
   /mailboxes:
     get:
       tags: [Mailboxes]
@@ -108,7 +108,7 @@ paths:
       parameters:
         - in: query
           name: a
-          schema: 
+          schema:
             type: integer
           description: Идентификатор первого почтового ящика.
         - in: query
