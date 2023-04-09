@@ -1,0 +1,3 @@
+url: "openapi/api.yaml"
+dom_id: "#swagger-ui"
+validatorUrl: "https://online.swagger.io/validator"
